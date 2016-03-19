@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<servers>
+    <server>
+        <address>192.168.1.10</address>
+        <port>4444</port>
+        <isLeader>true</isLeader>
+    </server>
+    <server>
+        <address>192.168.2.11</address>
+        <port>4445</port>
+        <isLeader>false</isLeader>
+    </server>
+    <server>
+        <address>192.168.2.12</address>
+        <port>4446</port>
+        <isLeader>false</isLeader>
+    </server>
+</servers>
