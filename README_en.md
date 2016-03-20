@@ -1,4 +1,4 @@
 # Simple Disributed Lock
 
-－ [English Version)](README_en.md)
-－ [中文版本](README.md)
+- [English Version)](README_en.md)
+- [中文版本](README.md)
