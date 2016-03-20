@@ -1,4 +1,4 @@
-package com.chenzp;
+package com.team6.sjtu;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 /**

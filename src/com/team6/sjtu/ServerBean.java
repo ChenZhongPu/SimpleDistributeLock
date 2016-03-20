@@ -1,4 +1,4 @@
-package com.chenzp;
+package com.team6.sjtu;
 
 /**
  * Created by chenzhongpu on 3/17/16.

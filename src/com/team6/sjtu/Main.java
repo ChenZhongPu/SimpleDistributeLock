@@ -1,4 +1,4 @@
-package com.chenzp;
+package com.team6.sjtu;
 
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;

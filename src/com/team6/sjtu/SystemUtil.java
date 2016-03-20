@@ -1,4 +1,4 @@
-package com.chenzp;
+package com.team6.sjtu;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -7,14 +7,13 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
 
 /**
  * Created by chenzhongpu on 3/17/16.
@@ -71,27 +70,68 @@ public class SystemUtil {
     }
 
     public static String sendTCPMsg(String msg, String address, int port, boolean isBroadCast) {
+        Socket socket = null;
+        PrintWriter out = null;
+        BufferedReader in = null;
         try {
-            Socket socket = new Socket(address,
+            socket = new Socket(address,
                     port);
-            PrintWriter out =
+            out =
                     new PrintWriter(socket.getOutputStream(), true);
 
             out.println(msg);
 
             if (!isBroadCast) {
-                BufferedReader in =
+                in =
                         new BufferedReader(
                                 new InputStreamReader(socket.getInputStream()));
                 return in.readLine();
             }
             // if is broadcast, ignore echo massage
             return null;
-        } catch (Exception e) {
+        } catch (UnknownHostException e) {
             e.printStackTrace();
+            System.out.println("UnknowHost Error");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("IO Error");
+        } finally {
+            if (socket != null) {
+                try {
+                    socket.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return null;
     }
+
+    public static Map<String, Integer> getDNSMap() {
+        List<ServerBean> servers = loadServers();
+        Map<String, Integer> dnsMap = new HashMap<String, Integer>();
+
+        for (ServerBean serverBean : servers) {
+            dnsMap.put(serverBean.address, serverBean.port);
+        }
+
+        return dnsMap;
+    }
+
 }
 
 
@@ -106,7 +146,6 @@ class Tuple<X, Y> {
 
 class SimpleMsg {
 
-    protected String messageId;
     protected int messageType;
     protected Object messageContent;
 
@@ -118,14 +157,6 @@ class SimpleMsg {
 
         this.messageType = messageType;
         this.messageContent = messageContent;
-    }
-
-    public String getMessageId() {
-        return messageId;
-    }
-
-    public void setMessageId(String messageId) {
-        this.messageId = messageId;
     }
 
     public int getMessageType() {
@@ -146,7 +177,7 @@ class SimpleMsg {
 
     @Override
     public String toString() {
-        return "SimpleMsg [messageId= " + messageId + ", messageType= " + messageType +
+        return "SimpleMsg [messageType= " + messageType +
                 ", messageContent= " + messageContent + "]";
     }
 }
@@ -176,7 +207,7 @@ class ClientMsg extends SimpleMsg {
 
     @Override
     public String toString() {
-        return "ClientMsg [messageId= " + messageId + ", messageType= " + messageType + ", messageContent= " +
+        return "ClientMsg [messageType= " + messageType + ", messageContent= " +
                 messageContent + ", clientId= " + clientId + "]";
 
     }

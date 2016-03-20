@@ -1,4 +1,4 @@
-package com.chenzp;
+package com.team6.sjtu;
 
 import com.google.gson.Gson;
 
@@ -14,24 +14,21 @@ public abstract class ServerProtocol {
         gson = new Gson();
     }
 
-    public String handleClientCheckOwn(String messageId, String clientId, String lockKey) {
-        System.out.println("run handleClientCheckOwn");
+    public String handleClientCheckOwn(String clientId, String lockKey) {
         SimpleMsg msg = new SimpleMsg();
-        msg.setMessageId(messageId);
         msg.setMessageType(Message.ECHOCHECKISOWN);
         msg.setMessageContent(false);
 
         String v = Server.lockMap.get(lockKey);
         if (v != null && v.equals(clientId)) {
-            System.out.println("==");
             msg.setMessageContent(true);
         }
         return gson.toJson(msg);
     }
 
-    public abstract String handleClientApply(String messageId, String clientId, String lockKey);
+    public abstract String handleClientApply(String clientId, String lockKey);
 
-    public abstract String handleClientRelase(String messageId, String clientId, String lockKey);
+    public abstract String handleClientRelase(String clientId, String lockKey);
 
     public abstract String processInput(String Input);
 }

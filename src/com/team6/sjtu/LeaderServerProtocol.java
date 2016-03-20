@@ -1,7 +1,6 @@
-package com.chenzp;
+package com.team6.sjtu;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by chenzhongpu on 3/17/16.
@@ -29,9 +28,8 @@ public class LeaderServerProtocol extends ServerProtocol {
     }
 
     @Override
-    public String handleClientApply(String messageId, String clientId, String lockKey) {
+    public String handleClientApply(String clientId, String lockKey) {
         SimpleMsg msg = new SimpleMsg();
-        msg.setMessageId(messageId);
         msg.setMessageType(Message.ECHOAPPLY);
         msg.setMessageContent(false);
         if (Server.lockMap.get(lockKey) == null) {
@@ -51,10 +49,9 @@ public class LeaderServerProtocol extends ServerProtocol {
     }
 
     @Override
-    public String handleClientRelase(String messageId, String clientId, String lockKey) {
+    public String handleClientRelase(String clientId, String lockKey) {
         SimpleMsg msg = new SimpleMsg();
         msg.setMessageType(Message.ECHORELEASE);
-        msg.setMessageId(messageId);
         msg.setMessageContent(false);
 
         String owner = Server.lockMap.get(lockKey);
@@ -82,15 +79,16 @@ public class LeaderServerProtocol extends ServerProtocol {
         switch (msg.getMessageType()) {
             case Message.CHECKISOWN:
                 System.out.println("run processinput... checkisown");
-                result = handleClientCheckOwn(msg.getMessageId(), msg.getClientId(),
+                result = handleClientCheckOwn(msg.getClientId(),
                         (String)msg.getMessageContent());
                 break;
             case Message.APPLY:
-                result = handleClientApply(msg.getMessageId(), msg.getClientId(),
+                result = handleClientApply(msg.getClientId(),
                         (String)msg.getMessageContent());
                 break;
             case Message.RELEASE:
-                result = "";
+                result = handleClientRelase(msg.getClientId(),
+                        (String)msg.getMessageContent());
                 break;
             default:
                 result = "";

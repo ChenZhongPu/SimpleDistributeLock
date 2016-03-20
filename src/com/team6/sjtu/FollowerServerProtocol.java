@@ -1,16 +1,9 @@
-package com.chenzp;
+package com.team6.sjtu;
 
-import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.lang.reflect.Type;
-import java.net.Socket;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by chenzhongpu on 3/18/16.
@@ -24,7 +17,7 @@ public class FollowerServerProtocol extends ServerProtocol {
         this.leaderBean = leaderBean;
     }
 
-    private String forwardMsgToLeader(String messageId, String clintId, String lockKey, int msgType) {
+    private String forwardMsgToLeader(String clintId, String lockKey, int msgType) {
 
         try {
 
@@ -42,16 +35,16 @@ public class FollowerServerProtocol extends ServerProtocol {
 
 
     @Override
-    public String handleClientApply(String messageId, String clientId, String lockKey) {
+    public String handleClientApply(String clientId, String lockKey) {
         // forward the message to leader server
-        return forwardMsgToLeader(messageId, clientId, lockKey, Message.APPLY);
+        return forwardMsgToLeader(clientId, lockKey, Message.APPLY);
 
     }
 
     @Override
-    public String handleClientRelase(String messageId, String clientId, String lockKey) {
+    public String handleClientRelase(String clientId, String lockKey) {
 
-        return forwardMsgToLeader(messageId, clientId, lockKey, Message.RELEASE);
+        return forwardMsgToLeader(clientId, lockKey, Message.RELEASE);
     }
 
     @Override
@@ -62,11 +55,11 @@ public class FollowerServerProtocol extends ServerProtocol {
         System.out.println("msg type = " + msg.getMessageType());
         switch (msg.getMessageType()) {
             case Message.CHECKISOWN:
-                result = handleClientCheckOwn(msg.getMessageId(), msg.getClientId(),
+                result = handleClientCheckOwn(msg.getClientId(),
                         (String)msg.getMessageContent());
                 break;
             case Message.APPLY:
-                result = handleClientApply(msg.getMessageId(), msg.getClientId(),
+                result = handleClientApply(msg.getClientId(),
                         (String)msg.getMessageContent());
                 break;
             case Message.BROADCAST:
@@ -77,7 +70,7 @@ public class FollowerServerProtocol extends ServerProtocol {
                 result = null;
                 break;
             case Message.RELEASE:
-                result = handleClientRelase(msg.getMessageId(), msg.getClientId(),
+                result = handleClientRelase(msg.getClientId(),
                         (String)msg.getMessageContent());
                 break;
             default:
