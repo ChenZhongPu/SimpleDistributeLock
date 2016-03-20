@@ -85,21 +85,33 @@ class ServerRunable implements Runnable {
             }
 
             String input = in.readLine();
-            if (input != null) {
-                String echo = serverProtocol.processInput(input);
-                System.out.println("return back from echo.." + echo);
-                if (echo != null) {
 
-                    out.println(echo);
+            while (input != null && !input.equals(Message.BYE)) {
+
+                if (! input.equals(Message.HELLO)) {
+                    String echo = serverProtocol.processInput(input);
+                    System.out.println("return back from echo.." + echo);
+
+                    if (echo != null && echo.equals(Message.ECHO_BROADCAST)) {
+                        break;
+                    }
+
+                    if (echo != null) {
+                        out.println(echo);
+                    }
+
+                } else {
+                    System.out.println("input is hello or echo_broadcast");
                 }
-            } else {
-                System.out.println("input is null");
+
+                System.out.println("print the map...");
+                for (ConcurrentHashMap.Entry<String, String> entry : Server.lockMap.entrySet()) {
+                    System.out.println(entry.getKey() + " : " + entry.getValue());
+                }
+
+                input = in.readLine();
             }
 
-            System.out.println("print the map...");
-            for (ConcurrentHashMap.Entry<String, String> entry : Server.lockMap.entrySet()) {
-                System.out.println(entry.getKey() + " : " + entry.getValue());
-            }
 
         } catch (IOException e) {
             e.printStackTrace();

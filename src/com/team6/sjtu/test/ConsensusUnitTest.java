@@ -65,15 +65,14 @@ public class ConsensusUnitTest{
 //        System.out.println("echo " + clientOne.tryLock(lockKeys.get(1)));
 
         System.out.println("echo 1 " + clientOne.unLock(lockKeys.get(1)));
-        System.out.println("next..");
         System.out.println("echo 2 " + clientOne.checkIsOwn(lockKeys.get(1)));
-//        System.out.println("echo 3 " + clientOne.tryLock(lockKeys.get(1)));
-//        System.out.println("echo 4 " + clientOne.checkIsOwn(lockKeys.get(1)));
-//        System.out.println("echo 5 " + clientTwo.checkIsOwn(lockKeys.get(1)));
-//        System.out.println("echo 6 " + clientTwo.tryLock(lockKeys.get(1)));
-//        System.out.println("echo 7 " + clientOne.unLock(lockKeys.get(1)));
-//        System.out.println("echo 8 " + clientOne.checkIsOwn(lockKeys.get(1)));
-//        System.out.println("echo 9 " + clientTwo.tryLock(lockKeys.get(1)));
+        System.out.println("echo 3 " + clientOne.tryLock(lockKeys.get(1)));
+        System.out.println("echo 4 " + clientOne.checkIsOwn(lockKeys.get(1)));
+        System.out.println("echo 5 " + clientTwo.checkIsOwn(lockKeys.get(1)));
+        System.out.println("echo 6 " + clientTwo.tryLock(lockKeys.get(1)));
+        System.out.println("echo 7 " + clientOne.unLock(lockKeys.get(1)));
+        System.out.println("echo 8 " + clientOne.checkIsOwn(lockKeys.get(1)));
+        System.out.println("echo 9 " + clientTwo.tryLock(lockKeys.get(1)));
 
         String str= "Junit is working fine";
         assertEquals("Junit is working fine",str);

@@ -67,7 +67,7 @@ public class FollowerServerProtocol extends ServerProtocol {
                 Server.lockMap.clear();
                 Type type = new TypeToken<ConcurrentHashMap<String, String>>(){}.getType();
                 Server.lockMap = gson.fromJson((String)msg.getMessageContent(), type);
-                result = null;
+                result = Message.ECHO_BROADCAST;
                 break;
             case Message.RELEASE:
                 result = handleClientRelase(msg.getClientId(),

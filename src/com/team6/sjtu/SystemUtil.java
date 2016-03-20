@@ -87,8 +87,9 @@ public class SystemUtil {
                                 new InputStreamReader(socket.getInputStream()));
                 return in.readLine();
             }
-            // if is broadcast, ignore echo massage
-            return null;
+            // if is broadcast, return ECHO_BROADCAST
+            return Message.ECHO_BROADCAST;
+
         } catch (UnknownHostException e) {
             e.printStackTrace();
             System.out.println("UnknowHost Error");

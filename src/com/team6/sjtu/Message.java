@@ -8,6 +8,8 @@ public class Message {
     public static final String HELLO = "hello";
     public static final String BYE = "bye";
 
+    public static final String ECHO_BROADCAST = "echo_broadcast";
+
     public static final int CHECKISOWN = 0;
     public static final int ECHOCHECKISOWN = 1;
 
