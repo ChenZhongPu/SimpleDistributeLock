@@ -6,12 +6,12 @@
         <isLeader>true</isLeader>
     </server>
     <server>
-        <address>192.168.2.11</address>
+        <address>192.168.1.11</address>
         <port>4445</port>
         <isLeader>false</isLeader>
     </server>
     <server>
-        <address>192.168.2.12</address>
+        <address>192.168.1.12</address>
         <port>4446</port>
         <isLeader>false</isLeader>
     </server>

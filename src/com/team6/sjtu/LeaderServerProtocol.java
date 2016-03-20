@@ -38,10 +38,7 @@ public class LeaderServerProtocol extends ServerProtocol {
             Server.lockMap.put(lockKey, clientId);
             msg.setMessageContent(true);
 
-            ClientMsg broadcastMsg = new ClientMsg();
-            broadcastMsg.setMessageType(Message.BROADCAST);
-            broadcastMsg.setMessageContent(gson.toJson(Server.lockMap));
-            SystemUtil.sendTCPMsg(gson.toJson(broadcastMsg), SystemUtil.LOCALADDRESS, 4445, true);
+            broadcast();
 
         }
 
@@ -61,10 +58,7 @@ public class LeaderServerProtocol extends ServerProtocol {
             msg.setMessageContent(true);
 
             // broadcast
-            ClientMsg broadcastMsg = new ClientMsg();
-            broadcastMsg.setMessageType(Message.BROADCAST);
-            broadcastMsg.setMessageContent(gson.toJson(Server.lockMap));
-            SystemUtil.sendTCPMsg(gson.toJson(broadcastMsg), SystemUtil.LOCALADDRESS, 4445, true);
+            broadcast();
         }
 
         return gson.toJson(msg);

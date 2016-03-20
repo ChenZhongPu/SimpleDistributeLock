@@ -123,6 +123,7 @@ public class SystemUtil {
 
     public static Map<String, Integer> getDNSMap() {
         List<ServerBean> servers = loadServers();
+
         Map<String, Integer> dnsMap = new HashMap<String, Integer>();
 
         for (ServerBean serverBean : servers) {
@@ -211,18 +212,4 @@ class ClientMsg extends SimpleMsg {
                 messageContent + ", clientId= " + clientId + "]";
 
     }
-}
-
-class Message {
-    public static final int CHECKISOWN = 0;
-    public static final int ECHOCHECKISOWN = 1;
-
-    public static final int APPLY = 2;
-    public static final int ECHOAPPLY = 3;
-
-    public static final int RELEASE = 4;
-    public static final int ECHORELEASE = 5;
-
-    public static final int BROADCAST = 6;
-    //public static final int ECHOBROADCAST = 7;
 }

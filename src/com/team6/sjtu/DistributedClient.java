@@ -1,6 +1,7 @@
 package com.team6.sjtu;
 
 import com.google.gson.Gson;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,13 +14,13 @@ import java.util.*;
  * Created by chenzhongpu on 3/15/16.
  */
 public class DistributedClient {
-    private String clientId;
+
+    public String clientId;
     private boolean isConnected;
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
     private Gson gson;
-    private static Map<String, Integer> dnsMap = SystemUtil.getDNSMap();
 
     public DistributedClient(String serverAddress) {
         this.isConnected = connectToServer(serverAddress);
@@ -30,8 +31,12 @@ public class DistributedClient {
     }
 
     private boolean sendMsg(int messageType, String messageContent) {
+
         ClientMsg msg = new ClientMsg(messageType, messageContent, clientId);
+        System.out.println("client send msg ..." + msg);
+
         out.println(gson.toJson(msg));
+
         try {
             SimpleMsg echoMsg = gson.fromJson(in.readLine(), SimpleMsg.class);
             return (boolean)echoMsg.getMessageContent();
@@ -55,24 +60,28 @@ public class DistributedClient {
 
         return sendMsg(Message.CHECKISOWN, lockKey);
     }
-    
+
     private boolean connectToServer(String serverAddress) {
+        boolean success = false;
         try {
-            socket = new Socket(SystemUtil.LOCALADDRESS, dnsMap.get(serverAddress));
+            socket = new Socket(SystemUtil.LOCALADDRESS, SystemUtil.getDNSMap().get(serverAddress));
             in =
                     new BufferedReader(
                             new InputStreamReader(socket.getInputStream()));
             out =
                     new PrintWriter(socket.getOutputStream(), true);
-            return true;
+            out.println(Message.HELLO);
+            success =  true;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return success;
     }
+
     private String getClientId() {
         return UUID.randomUUID().toString();
     }
 
-
 }
+
+
