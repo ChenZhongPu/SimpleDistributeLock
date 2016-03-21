@@ -64,25 +64,25 @@ public class ConsensusUnitTest{
 //        System.out.println("echo " + clientOne.checkIsOwn(lockKeys.get(1)));
 //        System.out.println("echo " + clientOne.tryLock(lockKeys.get(1)));
 
-        ArrayList<Integer> taskListOne = new ArrayList<Integer>();
-        ArrayList<Integer> taskListTwo = new ArrayList<Integer>();
+        List<Boolean> results = new ArrayList<Boolean>();
 
-        Integer[] tasksOne = new Integer[]{Message.CHECKISOWN, Message.APPLY,
-        Message.CHECKISOWN, Message.RELEASE};
+        Random randomizer = new Random();
+        int randomIndex = randomizer.nextInt(lockKeys.size());
+        String lockKeyOne = lockKeys.get(randomIndex);
+        String lockKeyTwo = lockKeys.get((randomIndex + 1) % lockKeys.size());
 
-        taskListOne.addAll(Arrays.asList(tasksOne));
+        results.add(clientOne.checkIsOwn(lockKeyOne)); // false
+        results.add(clientOne.tryLock(lockKeyOne));  // true
+        results.add(clientOne.checkIsOwn(lockKeyOne)); // true
+        results.add(clientTwo.tryLock(lockKeyOne)); // false
+        results.add(clientTwo.tryLock(lockKeyTwo)); // true
+        results.add(clientOne.unLock(lockKeyOne)); // true
+        results.add(clientOne.checkIsOwn(lockKeyOne)); // false
+        results.add(clientTwo.tryLock(lockKeyOne)); // true
 
-        Integer[] tasksTwo = new Integer[]{Message.CHECKISOWN, Message.APPLY};
-
-        System.out.println("echo 1 " + clientOne.unLock(lockKeys.get(1)));
-        System.out.println("echo 2 " + clientOne.checkIsOwn(lockKeys.get(1)));
-        System.out.println("echo 3 " + clientOne.tryLock(lockKeys.get(1)));
-        System.out.println("echo 4 " + clientOne.checkIsOwn(lockKeys.get(1)));
-        System.out.println("echo 5 " + clientTwo.checkIsOwn(lockKeys.get(1)));
-        System.out.println("echo 6 " + clientTwo.tryLock(lockKeys.get(1)));
-        System.out.println("echo 7 " + clientOne.unLock(lockKeys.get(1)));
-        System.out.println("echo 8 " + clientOne.checkIsOwn(lockKeys.get(1)));
-        System.out.println("echo 9 " + clientTwo.tryLock(lockKeys.get(1)));
+        for (boolean b : results) {
+            System.out.println(b);
+        }
 
         String str= "Junit is working fine";
         assertEquals("Junit is working fine",str);
