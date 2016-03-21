@@ -1,7 +1,6 @@
 package com.team6.sjtu;
 
 import com.google.gson.Gson;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,6 +11,8 @@ import java.util.*;
 
 /**
  * Created by chenzhongpu on 3/15/16.
+ *
+ * DistributedClient class is client.
  */
 public class DistributedClient {
 
@@ -22,6 +23,10 @@ public class DistributedClient {
     private PrintWriter out;
     private Gson gson;
 
+    /**
+     *
+     * @param serverAddress the address of server
+     */
     public DistributedClient(String serverAddress) {
         this.isConnected = connectToServer(serverAddress);
         if (this.isConnected) {
@@ -30,6 +35,14 @@ public class DistributedClient {
         }
     }
 
+    /**
+     * @see Message
+     * @see ClientMsg
+     *
+     * @param messageType message type
+     * @param messageContent message content
+     * @return true if success, false otherwise
+     */
     private boolean sendMsg(int messageType, String messageContent) {
 
         ClientMsg msg = new ClientMsg(messageType, messageContent, clientId);
@@ -46,21 +59,40 @@ public class DistributedClient {
         return false;
     }
 
+    /**
+     * try to get the lock
+     *
+     * @param lockKey lock key
+     * @return true if success, false otherwise
+     */
     public boolean tryLock(String lockKey) {
 
         return sendMsg(Message.APPLY, lockKey);
     }
 
+    /**
+     * release the lock
+     *
+     * @param lockKey lock key
+     * @return true if success, false otherwise
+     */
     public boolean unLock(String lockKey) {
 
         return sendMsg(Message.RELEASE, lockKey);
     }
 
+    /**
+     * check whether it owns the lock
+     *
+     * @param lockKey
+     * @return true if owns, false otherwise
+     */
     public boolean checkIsOwn(String lockKey) {
 
         return sendMsg(Message.CHECKISOWN, lockKey);
     }
 
+    // connect to server
     private boolean connectToServer(String serverAddress) {
         boolean success = false;
         try {
@@ -78,6 +110,7 @@ public class DistributedClient {
         return success;
     }
 
+    // generate client id using UUID
     private String getClientId() {
         return UUID.randomUUID().toString();
     }

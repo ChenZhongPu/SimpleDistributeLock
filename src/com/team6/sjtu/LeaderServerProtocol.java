@@ -4,16 +4,30 @@ import java.util.List;
 
 /**
  * Created by chenzhongpu on 3/17/16.
+ *
+ * @see ServerProtocol
+ *
+ * This class inherits from ServerProtocol,
+ * for handling the message to Leader Server.
  */
 public class LeaderServerProtocol extends ServerProtocol {
 
     private List<ServerBean> follows;
 
+    /**
+     *
+     * @param follows  Follower Servers
+     * @see ServerBean
+     */
     public LeaderServerProtocol(List<ServerBean> follows) {
         super();
         this.follows = follows;
     }
 
+    /**
+     * broadcast the new map to each follower server
+     * when the map is modified.
+     */
     private void broadcast() {
 
         ClientMsg broadcastMsg = new ClientMsg();
@@ -27,6 +41,15 @@ public class LeaderServerProtocol extends ServerProtocol {
         }
     }
 
+    /**
+     *
+     * process the message of applying the lock
+     *
+     * @param clientId an UUID string represents client ID
+     * @param lockKey the key of a lock
+     * @return the json message of SimpleMsg
+     * @see SimpleMsg
+     */
     @Override
     public String handleClientApply(String clientId, String lockKey) {
         SimpleMsg msg = new SimpleMsg();
@@ -45,8 +68,16 @@ public class LeaderServerProtocol extends ServerProtocol {
         return gson.toJson(msg);
     }
 
+    /**
+     *
+     * process the message of releasing the lock
+     * @param clientId an UUID string represents client ID
+     * @param lockKey the key of a lock
+     * @return the json message of SimpleMsg
+     * @see SimpleMsg
+     */
     @Override
-    public String handleClientRelase(String clientId, String lockKey) {
+    public String handleClientRelease(String clientId, String lockKey) {
         SimpleMsg msg = new SimpleMsg();
         msg.setMessageType(Message.ECHORELEASE);
         msg.setMessageContent(false);
@@ -64,6 +95,13 @@ public class LeaderServerProtocol extends ServerProtocol {
         return gson.toJson(msg);
     }
 
+    /**
+     * process the input message based on its type
+     * @param input input message, the json of ClientMsg
+     * @return the json message of SimpleMsg
+     * @see Message
+     * @see ClientMsg
+     */
     @Override
     public String processInput(String input) {
 
@@ -81,7 +119,7 @@ public class LeaderServerProtocol extends ServerProtocol {
                         (String)msg.getMessageContent());
                 break;
             case Message.RELEASE:
-                result = handleClientRelase(msg.getClientId(),
+                result = handleClientRelease(msg.getClientId(),
                         (String)msg.getMessageContent());
                 break;
             default:

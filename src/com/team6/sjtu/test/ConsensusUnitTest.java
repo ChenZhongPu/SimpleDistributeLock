@@ -64,6 +64,16 @@ public class ConsensusUnitTest{
 //        System.out.println("echo " + clientOne.checkIsOwn(lockKeys.get(1)));
 //        System.out.println("echo " + clientOne.tryLock(lockKeys.get(1)));
 
+        ArrayList<Integer> taskListOne = new ArrayList<Integer>();
+        ArrayList<Integer> taskListTwo = new ArrayList<Integer>();
+
+        Integer[] tasksOne = new Integer[]{Message.CHECKISOWN, Message.APPLY,
+        Message.CHECKISOWN, Message.RELEASE};
+
+        taskListOne.addAll(Arrays.asList(tasksOne));
+
+        Integer[] tasksTwo = new Integer[]{Message.CHECKISOWN, Message.APPLY};
+
         System.out.println("echo 1 " + clientOne.unLock(lockKeys.get(1)));
         System.out.println("echo 2 " + clientOne.checkIsOwn(lockKeys.get(1)));
         System.out.println("echo 3 " + clientOne.tryLock(lockKeys.get(1)));
@@ -89,6 +99,8 @@ class SendMsgRunnable implements Runnable {
     private int messageType;
 
     private String lockKey;
+
+    private List<Integer> msgQuene;
 
     public SendMsgRunnable(DistributedClient client, int messageType, String lockKey) {
 

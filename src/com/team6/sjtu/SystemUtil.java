@@ -17,12 +17,23 @@ import java.util.Map;
 
 /**
  * Created by chenzhongpu on 3/17/16.
+ *
+ * System Util class, including some basic functions,
+ * like load servers, send TCP message.
  */
 
 public class SystemUtil {
 
+    /**
+     * The localaddresss, 127.0.0.1
+     */
     public static final String LOCALADDRESS = "127.0.0.1";
 
+    /**
+     * get all the servers from config file (serverConfig.xml)
+     * @see ServerBean
+     * @return servers
+     */
     public static List<ServerBean> loadServers() {
 
         List<ServerBean> servers = new ArrayList<ServerBean>();
@@ -54,6 +65,14 @@ public class SystemUtil {
         return servers;
     }
 
+    /**
+     * get the tuple of both leader and follower
+     *
+     * @see Tuple
+     *
+     * @param servers all the servers in system
+     * @return the tuple of both leader and follower servers
+     */
     public static Tuple<List<ServerBean>, ServerBean> getFollowsAndLeader(List<ServerBean> servers) {
 
         List<ServerBean> follows = new ArrayList<ServerBean>();
@@ -69,6 +88,14 @@ public class SystemUtil {
         return new Tuple(follows, leader);
     }
 
+    /**
+     *
+     * @param msg message, in json string
+     * @param address address
+     * @param port linstening port
+     * @param isBroadCast true if it is a broadcast messge, false otherwise
+     * @return echo message
+     */
     public static String sendTCPMsg(String msg, String address, int port, boolean isBroadCast) {
         Socket socket = null;
         PrintWriter out = null;
@@ -122,6 +149,11 @@ public class SystemUtil {
         return null;
     }
 
+    /**
+     * get the dns map; key = address, value = port
+     *
+     * @return DNSMap, key = address, value = port
+     */
     public static Map<String, Integer> getDNSMap() {
         List<ServerBean> servers = loadServers();
 
@@ -136,7 +168,12 @@ public class SystemUtil {
 
 }
 
-
+/**
+ * Tuple class
+ *
+ * @param <X>
+ * @param <Y>
+ */
 class Tuple<X, Y> {
     public final X first;
     public final Y second;
@@ -146,6 +183,10 @@ class Tuple<X, Y> {
     }
 }
 
+/**
+ * Simple message format class for JSON.
+ * It includes message type and message content.
+ */
 class SimpleMsg {
 
     protected int messageType;
@@ -155,24 +196,47 @@ class SimpleMsg {
 
     }
 
+    /**
+     * @see Message
+     * @param messageType message type
+     * @param messageContent message content, is mainly lock key
+     */
     public SimpleMsg(int messageType, Object messageContent) {
 
         this.messageType = messageType;
         this.messageContent = messageContent;
     }
 
+    /**
+     * getter
+     * @see Message
+     * @return message type
+     */
     public int getMessageType() {
         return messageType;
     }
 
+    /**
+     * setter
+     * @see Message
+     * @param messageType message type
+     */
     public void setMessageType(int messageType) {
         this.messageType = messageType;
     }
 
+    /**
+     * getter
+     * @return message content
+     */
     public Object getMessageContent() {
         return messageContent;
     }
 
+    /**
+     * setter
+     * @param messageContent message content
+     */
     public void setMessageContent(Object messageContent) {
         this.messageContent = messageContent;
     }
@@ -184,14 +248,29 @@ class SimpleMsg {
     }
 }
 
+/**
+ * @see SimpleMsg
+ * The class is client message, inherits SimpleMsg.
+ *
+ * Add the client id attribute.
+ */
 class ClientMsg extends SimpleMsg {
 
     private String clientId;
 
+    /**
+     * default constructor
+     */
     public ClientMsg() {
 
     }
 
+    /**
+     * @see Message
+     * @param messageType message type
+     * @param messageContent message content
+     * @param clientId client id
+     */
     public ClientMsg(int messageType, Object messageContent, String clientId) {
 
         super(messageType, messageContent);
@@ -199,10 +278,18 @@ class ClientMsg extends SimpleMsg {
         this.clientId = clientId;
     }
 
+    /**
+     * getter
+     * @return client id
+     */
     public String getClientId() {
         return clientId;
     }
 
+    /**
+     * setter
+     * @param clientId client id
+     */
     public void setClientId(String clientId) {
         this.clientId = clientId;
     }

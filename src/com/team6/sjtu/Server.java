@@ -8,17 +8,31 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by chenzhongpu on 3/17/16.
+ *
+ * Server is the class for both leader and follower servers which
+ * accepts scokets from clients.
+ *
+ * Server creates a thread for each request.
  */
 public class Server {
 
+    /**
+     * the replicated map
+     */
     public static ConcurrentHashMap<String, String> lockMap = new ConcurrentHashMap<String, String>();
 
-    public static Tuple followsAndLeader = null;
+    /**
+     * @see Tuple
+     * the tuple store follower server and leader server.
+     *
+     * The first item is follower, and the second one is leader.
+     */
+    static Tuple followsAndLeader = null;
 
     public static void main(String[] args) {
 
         if (args.length != 2) {
-            System.err.println("error..");
+            System.err.println("Error: java com.team6.sjtu.Server --port --[true][false] ");
             System.exit(1);
         }
 
@@ -28,26 +42,12 @@ public class Server {
         followsAndLeader = SystemUtil.getFollowsAndLeader(servers);
 
         try{
-           // ServerSocket serverSocket = new ServerSocket(portNumber);
+
             ServerSocket serverSocket = new ServerSocket(portNumber);
 
             while (true) {
-                System.out.println("start of while...");
-                new Thread(new ServerRunable(serverSocket.accept(), isLeader)).start();
-//                Socket s = serverSocket.accept();
-//                PrintWriter out =
-//                        new PrintWriter(s.getOutputStream(), true);
-//                BufferedReader in = new BufferedReader(
-//                        new InputStreamReader(
-//                                s.getInputStream()));
 
-//                if (in.readLine() == null) {
-//                    System.out.println("in.readline is null");
-//                }
-//                else {
-//                    System.out.println("in.readline is not null");
-//                }
-                //out.println("from server .. ");
+                new Thread(new ServerRunable(serverSocket.accept(), isLeader)).start();
             }
 
         } catch (Exception e) {
@@ -58,19 +58,33 @@ public class Server {
 
 }
 
+/**
+ * This class is servered for multi-thread
+ */
 class ServerRunable implements Runnable {
 
     private Socket socket = null;
     private boolean isLeader = false;
 
+    /**
+     *
+     * @param socket the accepted socket from client
+     * @param isLeader true if it is in Leader; false otherwise
+     */
     public ServerRunable(Socket socket, boolean isLeader) {
         this.socket = socket;
         this.isLeader = isLeader;
     }
 
+    /**
+     * @see ServerProtocol
+     * @see Message
+     * To process the request based on different message prototol
+     */
+    @Override
     public void run() {
         try {
-            System.out.println("in the runing...");
+
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(
@@ -78,7 +92,6 @@ class ServerRunable implements Runnable {
 
             ServerProtocol serverProtocol;
             if (isLeader) {
-                System.out.println("is leader");
                 serverProtocol = new LeaderServerProtocol((List<ServerBean>) Server.followsAndLeader.first);
             } else {
                 serverProtocol = new FollowerServerProtocol((ServerBean) Server.followsAndLeader.second);
@@ -88,9 +101,11 @@ class ServerRunable implements Runnable {
 
             while (input != null && !input.equals(Message.BYE)) {
 
+                // ignore the HELLO message
+
                 if (! input.equals(Message.HELLO)) {
+
                     String echo = serverProtocol.processInput(input);
-                    System.out.println("return back from echo.." + echo);
 
                     if (echo != null && echo.equals(Message.ECHO_BROADCAST)) {
                         break;
@@ -100,14 +115,11 @@ class ServerRunable implements Runnable {
                         out.println(echo);
                     }
 
-                } else {
-                    System.out.println("input is hello or echo_broadcast");
                 }
-
-                System.out.println("print the map...");
-                for (ConcurrentHashMap.Entry<String, String> entry : Server.lockMap.entrySet()) {
-                    System.out.println(entry.getKey() + " : " + entry.getValue());
-                }
+//
+//                for (ConcurrentHashMap.Entry<String, String> entry : Server.lockMap.entrySet()) {
+//                    System.out.println(entry.getKey() + " : " + entry.getValue());
+//                }
 
                 input = in.readLine();
             }

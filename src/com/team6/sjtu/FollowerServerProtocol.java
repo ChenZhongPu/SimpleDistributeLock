@@ -7,16 +7,36 @@ import java.lang.reflect.Type;
 import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by chenzhongpu on 3/18/16.
+ *
+ * This class inherits from ServerProtocol,
+ * for handling the message to Leader Server.
+ *
+ * @see ServerProtocol
+ *
  */
 public class FollowerServerProtocol extends ServerProtocol {
 
     private ServerBean leaderBean;
 
+    /**
+     * @see ServerBean
+     * @param leaderBean the leader server
+     */
     public FollowerServerProtocol(ServerBean leaderBean) {
         super();
         this.leaderBean = leaderBean;
     }
 
+    /**
+     * forward the apply lock or release lock message to leader server
+     * @see Message
+     * @see ClientMsg
+     * @see SimpleMsg
+     * @param clintId an UUID string represents client ID
+     * @param lockKey the key of a lock
+     * @param msgType the type of message
+     * @return the json message of SimpleMsg
+     */
     private String forwardMsgToLeader(String clintId, String lockKey, int msgType) {
 
         try {
@@ -34,6 +54,13 @@ public class FollowerServerProtocol extends ServerProtocol {
     }
 
 
+    /**
+     * process the message of applying the lock.
+     * it will forward to leader.
+     * @param clientId an UUID string represents client ID
+     * @param lockKey the key of a lock
+     * @return the json message of SimpleMsg
+     */
     @Override
     public String handleClientApply(String clientId, String lockKey) {
         // forward the message to leader server
@@ -41,12 +68,28 @@ public class FollowerServerProtocol extends ServerProtocol {
 
     }
 
+    /**
+     * process the message of releasing the lock.
+     * it will forward to leader.
+     * @param clientId an UUID string represents client ID
+     * @param lockKey the key of a lock
+     * @return the json message of SimpleMsg
+     */
     @Override
-    public String handleClientRelase(String clientId, String lockKey) {
+    public String handleClientRelease(String clientId, String lockKey) {
 
         return forwardMsgToLeader(clientId, lockKey, Message.RELEASE);
     }
 
+    /**
+     * process the input message based on its type
+     * @param input the input messge as json
+     * @return the json message of SimpleMsg
+     *
+     * @see Message
+     * @see ClientMsg
+     * @see SimpleMsg
+     */
     @Override
     public String processInput(String input) {
         ClientMsg msg = gson.fromJson(input, ClientMsg.class);
@@ -70,7 +113,7 @@ public class FollowerServerProtocol extends ServerProtocol {
                 result = Message.ECHO_BROADCAST;
                 break;
             case Message.RELEASE:
-                result = handleClientRelase(msg.getClientId(),
+                result = handleClientRelease(msg.getClientId(),
                         (String)msg.getMessageContent());
                 break;
             default:
