@@ -1,0 +1,10 @@
+./src/com/team6/sjtu/DistributedClient.java
+./src/com/team6/sjtu/FollowerServerProtocol.java
+./src/com/team6/sjtu/LeaderServerProtocol.java
+./src/com/team6/sjtu/Message.java
+./src/com/team6/sjtu/Server.java
+./src/com/team6/sjtu/ServerBean.java
+./src/com/team6/sjtu/ServerProtocol.java
+./src/com/team6/sjtu/SystemUtil.java
+./src/com/team6/sjtu/test/CMain.java
+./src/com/team6/sjtu/test/ControlledUnitTest.java
