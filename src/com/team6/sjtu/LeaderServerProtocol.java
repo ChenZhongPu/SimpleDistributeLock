@@ -110,7 +110,6 @@ public class LeaderServerProtocol extends ServerProtocol {
 
         switch (msg.getMessageType()) {
             case Message.CHECKISOWN:
-                System.out.println("run processinput... checkisown");
                 result = handleClientCheckOwn(msg.getClientId(),
                         (String)msg.getMessageContent());
                 break;

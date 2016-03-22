@@ -102,7 +102,6 @@ class ServerRunable implements Runnable {
             while (input != null && !input.equals(Message.BYE)) {
 
                 // ignore the HELLO message
-
                 if (! input.equals(Message.HELLO)) {
 
                     String echo = serverProtocol.processInput(input);
@@ -116,10 +115,6 @@ class ServerRunable implements Runnable {
                     }
 
                 }
-//
-//                for (ConcurrentHashMap.Entry<String, String> entry : Server.lockMap.entrySet()) {
-//                    System.out.println(entry.getKey() + " : " + entry.getValue());
-//                }
 
                 input = in.readLine();
             }

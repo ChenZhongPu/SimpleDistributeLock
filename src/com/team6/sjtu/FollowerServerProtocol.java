@@ -94,8 +94,6 @@ public class FollowerServerProtocol extends ServerProtocol {
     public String processInput(String input) {
         ClientMsg msg = gson.fromJson(input, ClientMsg.class);
         String result;
-        System.out.println("processinput = " + msg);
-        System.out.println("msg type = " + msg.getMessageType());
         switch (msg.getMessageType()) {
             case Message.CHECKISOWN:
                 result = handleClientCheckOwn(msg.getClientId(),
@@ -106,7 +104,6 @@ public class FollowerServerProtocol extends ServerProtocol {
                         (String)msg.getMessageContent());
                 break;
             case Message.BROADCAST:
-                System.out.println("follow get the broadcast..." + msg.getMessageContent());
                 Server.lockMap.clear();
                 Type type = new TypeToken<ConcurrentHashMap<String, String>>(){}.getType();
                 Server.lockMap = gson.fromJson((String)msg.getMessageContent(), type);

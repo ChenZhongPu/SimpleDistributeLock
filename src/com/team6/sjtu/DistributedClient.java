@@ -46,8 +46,6 @@ public class DistributedClient {
     private boolean sendMsg(int messageType, String messageContent) {
 
         ClientMsg msg = new ClientMsg(messageType, messageContent, clientId);
-        System.out.println("client send msg ..." + msg);
-
         out.println(gson.toJson(msg));
 
         try {
