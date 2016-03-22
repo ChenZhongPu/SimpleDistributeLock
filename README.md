@@ -16,19 +16,19 @@
 
 其中，`sources.txt`是为了便于编译生成的：
 
-```
+```shell
 $ find . "*.java" > sources.txt
 ```
 
 ## 编译和运行
 
 编译代码：
-```
+```shell
 $ sh build.sh
 ```
 编译后会生成`classout`文件夹。
 
-```
+```shell
 # 启动服务器
 $ sh startServer.sh
 # 停止服务器
@@ -40,7 +40,7 @@ $ sh restartServer.sh
 
 ## 测试
 受控的单元测试：在给定客户端请求次序下，测试结果是否和预期一致。
-```
+```shell
 # 受控的单元测试
 $ sh runCTest.sh
 ```
