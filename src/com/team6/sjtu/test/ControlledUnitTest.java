@@ -63,9 +63,19 @@ public class ControlledUnitTest{
         results.add(clientOne.unLock(lockKeyOne)); // true
         results.add(clientOne.checkIsOwn(lockKeyOne)); // false
         results.add(clientTwo.tryLock(lockKeyOne)); // true
+        results.add(clientTwo.unLock(lockKeyTwo)); // true
+        results.add(clientTwo.unLock(lockKeyOne)); // true
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            System.err.println("Thread Error");
+        }
+
 
         assertArrayEquals(results.toArray(),
-                new Boolean[]{false, true, false, true, true, false, true});
+                new Boolean[]{false, true, false, true, true, false, true, true, true});
 
 
 
