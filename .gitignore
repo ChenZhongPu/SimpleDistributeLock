@@ -4,3 +4,4 @@
 out/
 classout/
 consensus.iml
+*.log

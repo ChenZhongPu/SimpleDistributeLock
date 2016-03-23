@@ -8,3 +8,4 @@
 ./src/com/team6/sjtu/SystemUtil.java
 ./src/com/team6/sjtu/test/CMain.java
 ./src/com/team6/sjtu/test/ControlledUnitTest.java
+./src/com/team6/sjtu/test/RMain.java
