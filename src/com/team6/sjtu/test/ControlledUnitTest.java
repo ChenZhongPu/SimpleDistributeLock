@@ -42,12 +42,11 @@ public class ControlledUnitTest{
 
         clientOne = new DistributedClient(serverAddressList.get(randomizer.nextInt(serverAddressList.size())));
         clientTwo = new DistributedClient(serverAddressList.get(randomizer.nextInt(serverAddressList.size())));
-//        clientOne = new DistributedClient("192.168.1.10");
-//        clientTwo = new DistributedClient("192.168.1.11");
+
     }
 
     @Test
-    public void testCheckIsOwn() {
+    public void testControlled() {
 
         List<Boolean> results = new ArrayList<Boolean>();
 
@@ -77,47 +76,6 @@ public class ControlledUnitTest{
         assertArrayEquals(results.toArray(),
                 new Boolean[]{false, true, false, true, true, false, true, true, true});
 
-
-
     }
 }
 
-//class SendMsgRunnable implements Runnable {
-//
-//    private DistributedClient client;
-//
-//    private int messageType;
-//
-//    private String lockKey;
-//
-//    private List<Integer> msgQuene;
-//
-//    public SendMsgRunnable(DistributedClient client, int messageType, String lockKey) {
-//
-//        this.client = client;
-//        this.messageType = messageType;
-//        this.lockKey = lockKey;
-//    }
-//
-//    @Override
-//    public void run() {
-//        boolean echo;
-//        switch (messageType) {
-//            case Message.CHECKISOWN:
-//                echo = client.checkIsOwn(lockKey);
-//                break;
-//            case Message.APPLY:
-//                echo = client.tryLock(lockKey);
-//                break;
-//            case Message.RELEASE:
-//                echo = client.unLock(lockKey);
-//                break;
-//            default:
-//                echo = false;
-//        }
-//        System.out.println("in runnable echo = " + echo);
-////        synchronized (ConsensusUnitTest.resultMap) {
-////            ConsensusUnitTest.resultMap.put(lockKey, echo);
-////        }
-//    }
-//}

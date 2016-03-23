@@ -113,6 +113,11 @@ public class DistributedClient {
         return UUID.randomUUID().toString();
     }
 
+    @Override
+    public String toString() {
+        return "Client " + clientId;
+    }
+
 }
 
 
