@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.*;
+import java.util.function.BooleanSupplier;
 
 /**
  * Created by chenzhongpu on 3/15/16.
@@ -50,7 +51,9 @@ public class DistributedClient {
 
         try {
             SimpleMsg echoMsg = gson.fromJson(in.readLine(), SimpleMsg.class);
-            return (boolean)echoMsg.getMessageContent();
+            // for java 6 compiler
+            return ((Boolean)echoMsg.getMessageContent()).booleanValue();
+//            return (boolean)echoMsg.getMessageContent();
         } catch (IOException e) {
             e.printStackTrace();
         }
