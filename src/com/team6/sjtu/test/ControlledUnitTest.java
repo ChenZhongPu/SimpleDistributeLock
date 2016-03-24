@@ -60,6 +60,12 @@ public class ControlledUnitTest{
         results.add(clientTwo.tryLock(lockKeyOne)); // false
         results.add(clientTwo.tryLock(lockKeyTwo)); // true
         results.add(clientOne.unLock(lockKeyOne)); // true
+        try{
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            System.err.println("Thread Error");
+        }
         results.add(clientOne.checkIsOwn(lockKeyOne)); // false
         results.add(clientTwo.tryLock(lockKeyOne)); // true
         results.add(clientTwo.unLock(lockKeyTwo)); // true
